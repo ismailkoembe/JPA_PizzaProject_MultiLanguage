@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./WEB-INF/templates/newTemplate.xhtml" 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="content">
+
+        <f:view locale="#{launguageController.locale}">
+            <h:form id="langForm">
+                <h:commandButton action="#{launguageController.switchLanguage('de')}" 
+                                 value="Deutsch" />
+                <h:commandButton action="#{launguageController.switchLanguage('en')}" 
+                                 value="English" />
+                <h:commandButton action="#{launguageController.switchLanguage('tr')}" 
+                                 value="Turkisch" />
+            </h:form>
+            <h:messages  fatalStyle="color:red" infoStyle="color:green" />
+
+
+            <h:form rendered="#{not orderController.check}" >
+                <p:panel header="Information">
+                    <p:panelGrid columns="3">
+
+
+                        <h:outputLabel for="firstIn" value="#{msg.firstName}"  />
+                        <h:inputText id="firstIn" value="#{orderController.orders.customer.firstname}" >
+                            <f:validateLength for="firstIn" minimum="3" maximum="17"/>
+                        </h:inputText>
+                        <h:message for="firstIn" />
+
+                        <h:outputLabel for="lastIn" value="#{msg.lastName}" />
+                        <h:inputText id="lastIn" value="#{orderController.orders.customer.lastname}" validator="myValidator" />
+                        <h:message for="lastIn" />
+
+                        <h:outputLabel for="email" value="#{msg.email}"/>
+                        <h:inputText id="email" value="#{orderController.orders.customer.email}" required="true" 
+                                     validatorMessage="Invalid email adresse!" requiredMessage="Email is mandatory">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+                        </h:inputText>
+                        <h:message for="email"/>
+
+                        <h:outputLabel for="street" value="#{msg.street}" />
+                        <h:inputText id="street" value="#{orderController.orders.customer.street}" validator="myValidator" />
+                        <h:message for="street" />
+                        <h:outputLabel for="city" value="#{msg.city}" />
+                        <h:inputText id="city" value="#{orderController.orders.customer.city}" validator="myValidator" />
+                        <h:message for="city" />
+
+
+
+                        <h:commandButton action="#{orderController.store()}" value="#{msg.save}"  />
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+
+
+            <h:panelGroup rendered="#{orderController.check}">
+                <h:form>
+                <p:panelGrid columns="2">
+
+
+                    <h:outputLabel for="txtvorname" value="#{msg.firstName}"/> 
+                    <h:inputText id="txtvorname" value="#{orderController.orders.customer.firstname}"/>
+
+                    <h:outputLabel for="txtname" value="#{msg.lastName}"/> 
+                    <h:inputText id="txtname" value="#{orderController.orders.customer.lastname}" />
+
+                    <h:outputLabel for="txtstadt" value="#{msg.street}"/> 
+                    <h:inputText id="txtstadt" value="#{orderController.orders.customer.street}" />
+
+                    <h:outputLabel for="txtstrasse" value="#{msg.city}"/> 
+                    <h:inputText id="txtstrasse" value="#{orderController.orders.customer.city}" />
+
+                </p:panelGrid>
+                </h:form>
+                <h:panelGrid columns="3">
+                    <h:dataTable value="#{orderController.orders.selection}" var="pizza" 
+                                 border="2">
+                        <h:column>
+                            <f:facet name="header"> #{msg.PizzaID}</f:facet>
+                                #{pizza.pizzaId}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg.PizzaArt}</f:facet>
+                                #{pizza.getpType()}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg.PizzaPreise} €</f:facet>
+                                #{pizza.price}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg.PizzaNummer}</f:facet>        
+
+                            #{pizza.number} 
+                        </h:column>
+
+                    </h:dataTable>
+
+
+                    <h:outputLabel value="#{msg.TotalPrice}    :"/>  <h:outputLabel value="#{orderController.calcPrice()}"/>
+                </h:panelGrid>
+                <h:form >
+                    <h:commandButton action="#{orderController.saveOrders()}" value="#{msg.save}"  />
+                    <h:commandButton action="#{orderController.resetSession()}" value="#{msg.back}"  />
+                    <h:commandButton action="#{orderController.creatpdf()}" value="#{msg.bill}"  />       
+                    <h:commandButton action= "/index.xhtml" value="#{msg.NewOrder}" />
+                </h:form>
+            </h:panelGroup>
+
+        </f:view>
+    </ui:define>
+</ui:composition>
+

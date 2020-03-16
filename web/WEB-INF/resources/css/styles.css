@@ -1,0 +1,19 @@
+* {
+  font-family: sans-serif;
+  padding: 9px;
+  color: gray;
+}
+body > header {
+  background: url("../img/pizza service.jpg");
+  border-radius: 40px;  
+  box-shadow: 5px 5px 9px gray;
+}
+a {
+  
+  color: red;
+  text-decoration: none;
+}
+a:hover, h1.title {
+  color: red;
+  text-shadow: 0 0 10px white, 0 0 50px white;
+}
